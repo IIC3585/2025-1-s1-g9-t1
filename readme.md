@@ -1,5 +1,9 @@
+<h3>Para setup:</h3>
+<p>npm install</p>
+
+
 <h3>Para correr:</h3>
-<p>node file.js</p>
+<p>node algo.js</p>
 
 <h4>functions.js:</h4>
 <p>las funciones del enunciado</p>
