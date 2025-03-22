@@ -14,14 +14,22 @@ function swap(file, n, m) {
     modify_csv(file, func)
 }
 
-function rowstocolumns (file ) {
-    //transforma las filas en columnas
-    return;
+function rowstocolumns (file) {
+    const func = (data) => {
+        const transpose = data[0].map((value, col_index) => data.map(row => row[col_index])
+        );
+        return transpose;
+    };
+    modify_csv(file, func);
 }
 
 function columnstorows (file) {
-    // Contraria de rowstocolumns?
-    return;
+    const func = (data) => {
+        const transpose = data[0].map((value, col_index) => data.map(row => row[col_index])
+        );
+        return transpose;
+    };
+    modify_csv(file, func);
 }
 
 function rowdelete (file, n) {
@@ -62,3 +70,6 @@ function tohtmltable (file) {
     */
     return;
 }
+
+rowstocolumns("./example.csv");
+columnstorows("./output.csv");
