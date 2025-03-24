@@ -1,5 +1,7 @@
 var _ = require('lodash/fp')
 const {modify_csv} = require('./helpers.js')
+const { read_csv } = require('./helpers.js');
+
 
 function swap(file, n, m) {
     const func = (data) => {
@@ -50,30 +52,87 @@ function columndelete (file, n) {
 }
 
 function insertrow(file, n, row) {
-    // inserta una fila después de la n con la información dada en la lista row
-    return;
+    const func = (data) => {
+        // Verificar que `data` no esté vacío
+        if (data.length === 0) {
+            throw new Error("El archivo CSV está vacío.");
+        }
+
+        // Obtener el número de columnas del archivo CSV
+        const numColumns = data[0].length;
+
+        // Validar que la nueva fila tenga el mismo número de columnas
+        if (row.length !== numColumns) {
+            throw new Error(`Error: La fila insertada tiene ${row.length} columnas, pero se esperaban ${numColumns}.`);
+        }
+
+        // Insertar la nueva fila en la posición correcta
+        return [...data.slice(0, n + 1), row, ...data.slice(n + 1)];
+    };
+    
+    modify_csv(file, func);
 }
+
 
 function insertcolumn(file, n, column) {
-    // inserta una columna después de la columna n con la información dada en la lista column
-    return;
+    const func = (data) => {
+        // Verificar que `data` no esté vacío
+        if (data.length === 0) {
+            throw new Error("El archivo CSV está vacío.");
+        }
+
+        // Obtener el número de filas del archivo CSV
+        const numRows = data.length;
+
+        // Validar que la nueva columna tenga el mismo número de filas
+        if (column.length !== numRows) {
+            throw new Error(`Error: La columna insertada tiene ${column.length} filas, pero se esperaban ${numRows}.`);
+        }
+
+        // Insertar la nueva columna en la posición `n`
+        return data.map((row, i) => [
+            ...row.slice(0, n + 1),
+            column[i],
+            ...row.slice(n + 1)
+        ]);
+    };
+    
+    modify_csv(file, func);
 }
 
-function tohtmltable (file) {
-    /* formato:
-                Juan, Perez
-                Ana, Flores 
-    se convierte en
-                <table>
-                <tr>
-                    <td>Juan </td>
-                    <td>Perez </td>
-                </tr>
-                <tr>
-                    <td>Ana </td>
-                    <td>Flores </td>
-                </tr>
-                </table>
-    */
-    return;
+
+function tohtmltable(file) {
+    const data = read_csv(file);  // Leer el CSV
+
+    // Crear la tabla HTML
+    let html = '<table>\n';
+
+    // Iterar sobre cada fila del CSV
+    data.forEach((row) => {
+        html += '    <tr>\n'; // Comienza la fila
+
+        // Iterar sobre cada celda de la fila y agregarla al HTML
+        row.forEach((cell) => {
+            html += `        <td>${cell} </td>\n`;  // Cada celda se coloca dentro de <td>
+        });
+
+        html += '    </tr>\n';  // Cerrar la fila
+    });
+
+    html += '</table>\n';  // Cerrar la tabla
+
+    return html;
 }
+
+
+
+// swap('example.csv', 0, 1);
+// rowstocolumns('example.csv');
+// columnstorows('example.csv');
+// rowdelete('example.csv', 0);
+// columndelete('example.csv', 0);
+// insertrow('example.csv', 0, ['a', 'b', 'c']);
+// insertcolumn('example.csv', 0, ['a', 'b', 'c']);
+
+const htmlTable = tohtmltable('example.csv');
+console.log(htmlTable);
