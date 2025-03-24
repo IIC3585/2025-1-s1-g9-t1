@@ -34,12 +34,19 @@ function columnstorows (file) {
 
 function rowdelete (file, n) {
     // elimina la fila n
-    return;
+    const func = (data) => {
+        return data.filter((_, index) => index != n);
+    }
+    modify_csv(file, func)
+    
 }
 
 function columndelete (file, n) {
     // elimina la columna n
-    return;
+    const func = (data) => {
+        return data.map((row) => row.filter((_, index) => index != n));
+    }
+    modify_csv(file, func)
 }
 
 function insertrow(file, n, row) {
@@ -70,6 +77,3 @@ function tohtmltable (file) {
     */
     return;
 }
-
-rowstocolumns("./example.csv");
-columnstorows("./output.csv");
