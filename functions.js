@@ -27,10 +27,15 @@ function rowstocolumns (file) {
 
 function columnstorows (file) {
     const func = (data) => {
-        const transpose = data[0].map((value, col_index) => data.map(row => row[col_index])
-        );
-        return transpose;
+        return data.reduce((acc, row) => {
+            row.forEach((value, colIndex) => {
+                if (!acc[colIndex]) acc[colIndex] = [];
+                acc[colIndex].push(value);
+            });
+            return acc;
+        }, []);
     };
+
     modify_csv(file, func);
 }
 
@@ -134,5 +139,5 @@ function tohtmltable(file) {
 // insertrow('example.csv', 0, ['a', 'b', 'c']);
 // insertcolumn('example.csv', 0, ['a', 'b', 'c']);
 
-const htmlTable = tohtmltable('example.csv');
-console.log(htmlTable);
+// const htmlTable = tohtmltable('example.csv');
+// console.log(htmlTable);
