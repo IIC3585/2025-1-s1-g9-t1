@@ -6,12 +6,9 @@ const { read_csv } = require('./helpers.js');
 function swap(file, n, m) {
     const func = (data) => {
         return data.map((row) => {
-            temp = row[n];
-            row[n] = row[m];
-            row[m] = temp;
+            [row[n], row[m]] = [row[m], row[n]];
             return row;
         });
-
     };
     modify_csv(file, func)
 }
