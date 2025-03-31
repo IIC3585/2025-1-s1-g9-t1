@@ -7,16 +7,16 @@ function read_csv(file) {
     return Papa.parse(data, { header: false, dynamicTyping: true }).data;
 }
 
-function write_csv(file, data) {
+function write_csv(data, file="output.csv") {
     const csv = Papa.unparse(data);
-    fs.writeFileSync("output.csv", csv, "utf8");
+    fs.writeFileSync(file, csv, "utf8");
 }
 
 function modify_csv(file, func) {
     const pipeline = _.pipe(
         (file) => read_csv(file),
         func,
-        (data) => write_csv(file, data)
+        write_csv
     );
 
     return pipeline(file);
