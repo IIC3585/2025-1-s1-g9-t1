@@ -93,9 +93,9 @@ function insertcolumn(file, n, column) {
 
         // Insertar la nueva columna en la posición `n`
         return data.map((row, i) => [
-            ...row.slice(0, n + 1),
+            ...row.slice(0, n),
             column[i],
-            ...row.slice(n + 1)
+            ...row.slice(n)
         ]);
     };
     
@@ -133,8 +133,8 @@ function tohtmltable(file) {
 // columnstorows('example.csv');
 // rowdelete('example.csv', 0);
 // columndelete('example.csv', 0);
-// insertrow('example.csv', 0, ['a', 'b', 'c']);
-// insertcolumn('example.csv', 0, ['a', 'b', 'c']);
+// insertrow('example.csv', 1, ['a', 'b', 'c', 'd', 'e']);
+// insertcolumn('example.csv', 1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
 // const htmlTable = tohtmltable('example.csv');
 // console.log(htmlTable);
